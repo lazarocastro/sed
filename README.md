@@ -7,243 +7,301 @@ A versão mais atualizada deste arquivo pode ser encontrada em <http://www.wolle
 
 ## PREENCHIMENTO DE ARQUIVOS:
 
- duplicar o tamanho de um arquivo
- 
- ``
- $ sed G
- ``
+duplicar o tamanho de um arquivo
 
- triplicar o tamanho de um arquivo
- 
- ``
- $ sed 'G;G'
+``
+$ sed G
 ``
 
- desfazer a duplicação de tamanho (assume que as linhas de números iguais
- estão em branco)
- 
- ``
- $ sed 'n;d'
- ``
+triplicar o tamanho de um arquivo
+
+``
+$ sed 'G;G'
+``
+
+desfazer a duplicação de tamanho (assume que as linhas de números iguais
+estão em branco)
+
+``
+$ sed 'n;d'
+``
 
 ## NUMERACÃO:
 
- numera cada linha de um arquivo (com alinhamento simples a esquerda). Usar
- uma tabulação em vez do espaço vai preservar as margens. (veja a observação
- sobre o '\t' no final desse arquivo)
- sed = arquivo | sed 'N;s/\n/\t/'
+Numera cada linha de um arquivo (com alinhamento simples a esquerda). Usar
+uma tabulação em vez do espaço vai preservar as margens. (veja a observação
+sobre o '\t' no final desse arquivo)
 
- ### numera cada linha de um arquivo (números à esquerda, alinhados à direita)
- sed = arquivo | sed 'N; s/^/     /; s/ *\(.\{6,\}\)\n/\1  /'
+``
+sed = arquivo | sed 'N;s/\n/\t/'
+``
 
- ### numera cada linha de um arquivo, mas só imprime os números se a linha não
- ### estiver em branco
- sed '/./=' arquivo | sed '/./N; s/\n/ /'
+Numera cada linha de um arquivo (números à esquerda, alinhados à direita)
 
- ### conta as linhas (emula o "wc -l")
- sed -n '$='
+``
+sed = arquivo | sed 'N; s/^/     /; s/ *\(.\{6,\}\)\n/\1  /'
+``
+
+Numera cada linha de um arquivo, mas só imprime os números se a linha não
+estiver em branco
+
+``
+sed '/./=' arquivo | sed '/./N; s/\n/ /'
+``
+
+Conta as linhas (emula o "wc -l")
+
+``
+sed -n '$='
+``
 
 ## CONVERSÃO DE TEXTO E SUBSTITUIÇÃO:
 
- # EM AMBIENTE UNIX: converte o caractere de linha nova do DOS (CR/LF) para o 
- # formato unix
- sed 's/.$//'               # assume que todas as linhas terminam com CR/LF
- sed 's/^M$//'              # no bash/tcsh, pressione Ctrl-V depois Ctrl-M
- sed 's/\x0D$//'            # somente no sed v1.5
+EM AMBIENTE UNIX: converte o caractere de linha nova do DOS (CR/LF) para o 
+formato unix
 
- # EM AMBIENTE DOS: converte o caractere de linha nova do Unix (LF) para 
- # o formato DOS
- sed 's/$//'                          # método 1
- sed -n p                             # método 2
+``
+sed 's/.$//'               # assume que todas as linhas terminam com CR/LF
+sed 's/^M$//'              # no bash/tcsh, pressione Ctrl-V depois Ctrl-M
+sed 's/\x0D$//'            # somente no sed v1.5
+``
 
- # apaga o espaço em branco inicial (espaço, tabulação) do começo
- # de cada linha, puxando o texto para a esquerda
- sed 's/^[ \t]*//'                    # veja a nota sobre o '\t' no final
-                                      # deste arquivo
+EM AMBIENTE DOS: converte o caractere de linha nova do Unix (LF) para 
+o formato DOS
 
- # apaga o espaço em branco final (espaço, tabulação) do final de cada linha
- sed 's/[ \t]*$//'                    # veja a nota sobre o '\t' no final
-                                      # deste arquivo           
- 
- # deleta AMBOS o espaço em branco final e inicial de cada linha
- sed 's/^[ \t]*//;s/[ \t]*$//'
+``
+sed 's/$//'                          # método 1
+sed -n p                             # método 2
+``
 
- # insere 5 espaços em branco no ínicio de cada linha (faz o "offset" da pagina)
- sed 's/^/     /'
+Apaga o espaço em branco inicial (espaço, tabulação) do começo
+de cada linha, puxando o texto para a esquerda
 
- # alinha todo a direita, numa coluna de 79 caracteres de largura
- sed -e :a -e 's/^.\{1,78\}$/ &/;ta'  # definido como 78 mais 1 espaço
+``
+sed 's/^[ \t]*//'                    # veja a nota sobre o '\t' no final
+                                     # deste arquivo
+``
 
- # centraliza todo o texto no meio de uma coluna de 79 caracteres de
- # largura. No método 1, os espaços no começo da linha são significativos,
- # e espaços em branco são anexados ao final de cada linha. No método 2,
- # os espaços no início de cada linha são descartados, logo, não é
- # adicionado nenhum espaço no final de cada linha.
- sed  -e :a -e 's/^.\{1,77\}$/ & /;ta'                     # método 1
- sed  -e :a -e 's/^.\{1,77\}$/ &/;ta' -e 's/\( *\)\1/\1/'  # método 2
+Apaga o espaço em branco final (espaço, tabulação) do final de cada linha
 
- # substituir (achar e trocar) "foo" por "bar" em cada linha
- sed 's/foo/bar/'             # troca somente a 1a instância de uma linha
- sed 's/foo/bar/4'            # troca somente a 4a instância de uma linha
- sed 's/foo/bar/g'            # troca TODAS as instâncias de uma linha
+``
+sed 's/[ \t]*$//'                    # veja a nota sobre o '\t' no final
 
- # substitui "foo" por "bar" SOMENTE nas linhas que contem "baz" 
- sed '/baz/s/foo/bar/g'
+                                     # deste arquivo
+``
 
- # substitui "foo" por "bar" EXCETO nas linhas que contem "baz"
- sed '/baz/!s/foo/bar/g'
+Deleta AMBOS o espaço em branco final e inicial de cada linha
 
- # reverter a ordem das linhas (emula o "tac")
- sed '1!G;h;$!d' 
+``
+sed 's/^[ \t]*//;s/[ \t]*$//'
+``
 
- # reverte cada caractere em cada linha (emula o "rev")
- sed '/\n/!G;s/\(.\)\(.*\n\)/&\2\1/;//D;s/.//'
+Insere 5 espaços em branco no ínicio de cada linha (faz o "offset" da pagina)
 
- # une pares de linhas lado a lado (como o "paste")
- sed 'N;s/\n/ /'
+``
+sed 's/^/     /'
+``
 
-IMPRESSÃO SELETIVA DE CERTAS LINHAS:
- 
- # imprime as primeiras 10 linhas de um arquivo (emula o comportamento do "head")
- sed 10q
+Alinha todo a direita, numa coluna de 79 caracteres de largura
 
- # imprime a primeira linha de um arquivo (emula o "head -1")
- sed q
+``
+sed -e :a -e 's/^.\{1,78\}$/ &/;ta'  # definido como 78 mais 1 espaço
+``
 
- # imprime as últimas 10 linhas de um arquivo (emula o "tail") 
- sed -e :a -e '$q;N;11,$D;ba'
+Centraliza todo o texto no meio de uma coluna de 79 caracteres de
+largura. No método 1, os espaços no começo da linha são significativos,
+e espaços em branco são anexados ao final de cada linha. No método 2,
+os espaços no início de cada linha são descartados, logo, não é
+adicionado nenhum espaço no final de cada linha.
 
- # imprime somente a última linha de um arquivo (emula o "tail -1")
- sed '$!d'
+``
+sed  -e :a -e 's/^.\{1,77\}$/ & /;ta'                     # método 1
 
- # imprime somente as linhas que se encaixam na expressão regular 
- # (emula o "grep")
- sed -n '/regexp/p'           # método 1
- sed '/regexp/!d'             # método 2
+sed  -e :a -e 's/^.\{1,77\}$/ &/;ta' -e 's/\( *\)\1/\1/'  # método 2
+``
 
- # imprime somente as linhas que NÃO se encaixam na regexp (emula o "grep -v")
- sed -n '/regexp/!p'          # método 1, corresponde ao descrito acima
- sed '/regexp/d'              # método 2, sintaxe mais simples
+Substituir (achar e trocar) "foo" por "bar" em cada linha
 
- # imprime uma linha de contexto antes e depois da expressão regular,
- # com o número da linha indicando onde a expressão regular 
- # aparece (similar ao "grep -A1 -B1")
- sed -n -e '/regexp/{=;x;1!p;g;$!N;p;D;}' -e h
+``
+sed 's/foo/bar/'             # troca somente a 1a instância de uma linha
 
- # procura e imprime por AAA e BBB e CCC (em qualquer ordem)
- sed '/AAA/!d; /BBB/!d; /CCC/!d'
+sed 's/foo/bar/4'            # troca somente a 4a instância de uma linha
 
- # procura e imprime por AAA e BBB e CCC (nessa ordem)
- sed '/AAA.*BBB.*CCC/!d'
+sed 's/foo/bar/g'            # troca TODAS as instâncias de uma linha
+``
 
- # procura e imprime por AAA ou BBB ou CCC (emula o "egrep")
- sed -e '/AAA/b' -e '/BBB/b' -e '/CCC/b' -e d
+Substitui "foo" por "bar" SOMENTE nas linhas que contem "baz" 
 
- # imprime um parágrafo se ele possuir AAA (linhas vazias separam os parágrafos).
- # Com o HHsed v1.5 deve ser inserido o 'G;' apos o 'x;', nos 3 scripts abaixo
- sed -e '/./{H;$!d;}' -e 'x;/AAA/!d;'
+``
+sed '/baz/s/foo/bar/g'
+``
 
- # imprime um parágrafo se ele possuir AAA e BBB e CCC (em qualquer ordem)
- sed -e '/./{H;$!d;}' -e 'x;/AAA/!d;/BBB/!d;/CCC/!d'
+Substitui "foo" por "bar" EXCETO nas linhas que contem "baz"
 
- # imprime o parágrafo inteiro se ele possuir AAA ou BBB ou CCC
- sed -e '/./{H;$!d;}' -e 'x;/AAA/b' -e '/BBB/b' -e '/CCC/b' -e d
+``
+sed '/baz/!s/foo/bar/g'
+``
 
- # imprime somente as linhas com 65 caracteres ou mais
- sed -n '/^.\{65\}/p'
+Reverter a ordem das linhas (emula o "tac")
 
- # imprime somente as linhas com menos que 65 caracteres
- sed -n '/^.\{65\}/!p'        # método 1, corresponde ao descrito acima
- sed '/^.\{65\}/d'            # método 2, sintaxe mais simples
+``
+sed '1!G;h;$!d' 
+``
 
- # imprime uma parte do arquivo que vai da expressão regular até
- # o final do mesmo
- sed -n '/regexp/,$p'
+Reverte cada caractere em cada linha (emula o "rev")
 
- # imprime uma parte do arquivo baseada nos números das linhas (linhas 8-12,
- # inclusive)
- sed -n '8,12p'               # método 1
- sed '8,12!d'                 # método 2
+``
+sed '/\n/!G;s/\(.\)\(.*\n\)/&\2\1/;//D;s/.//'
+``
 
- # imprime a linha de número 52
- sed -n '52p'                 # método 1
- sed '52!d'                   # método 2
- sed '52q;d'                  # método 3, eficiente com arquivos grandes
+Une pares de linhas lado a lado (como o "paste")
 
- # imprime um pedaço de arquivo que está entre as duas
- # expressões regulares (inclusive)
- sed -n '/Iowa/,/Montana/p'             # é case sensitive
+``
+sed 'N;s/\n/ /'
+``
+
+## IMPRESSÃO SELETIVA DE CERTAS LINHAS:
+
+# imprime as primeiras 10 linhas de um arquivo (emula o comportamento do "head")
+sed 10q
+
+# imprime a primeira linha de um arquivo (emula o "head -1")
+sed q
+
+# imprime as últimas 10 linhas de um arquivo (emula o "tail") 
+sed -e :a -e '$q;N;11,$D;ba'
+
+# imprime somente a última linha de um arquivo (emula o "tail -1")
+sed '$!d'
+
+# imprime somente as linhas que se encaixam na expressão regular 
+# (emula o "grep")
+sed -n '/regexp/p'           # método 1
+sed '/regexp/!d'             # método 2
+
+# imprime somente as linhas que NÃO se encaixam na regexp (emula o "grep -v")
+sed -n '/regexp/!p'          # método 1, corresponde ao descrito acima
+sed '/regexp/d'              # método 2, sintaxe mais simples
+
+# imprime uma linha de contexto antes e depois da expressão regular,
+# com o número da linha indicando onde a expressão regular 
+# aparece (similar ao "grep -A1 -B1")
+sed -n -e '/regexp/{=;x;1!p;g;$!N;p;D;}' -e h
+
+# procura e imprime por AAA e BBB e CCC (em qualquer ordem)
+sed '/AAA/!d; /BBB/!d; /CCC/!d'
+
+# procura e imprime por AAA e BBB e CCC (nessa ordem)
+sed '/AAA.*BBB.*CCC/!d'
+
+# procura e imprime por AAA ou BBB ou CCC (emula o "egrep")
+sed -e '/AAA/b' -e '/BBB/b' -e '/CCC/b' -e d
+
+# imprime um parágrafo se ele possuir AAA (linhas vazias separam os parágrafos).
+# Com o HHsed v1.5 deve ser inserido o 'G;' apos o 'x;', nos 3 scripts abaixo
+sed -e '/./{H;$!d;}' -e 'x;/AAA/!d;'
+
+# imprime um parágrafo se ele possuir AAA e BBB e CCC (em qualquer ordem)
+sed -e '/./{H;$!d;}' -e 'x;/AAA/!d;/BBB/!d;/CCC/!d'
+
+# imprime o parágrafo inteiro se ele possuir AAA ou BBB ou CCC
+sed -e '/./{H;$!d;}' -e 'x;/AAA/b' -e '/BBB/b' -e '/CCC/b' -e d
+
+# imprime somente as linhas com 65 caracteres ou mais
+sed -n '/^.\{65\}/p'
+
+# imprime somente as linhas com menos que 65 caracteres
+sed -n '/^.\{65\}/!p'        # método 1, corresponde ao descrito acima
+sed '/^.\{65\}/d'            # método 2, sintaxe mais simples
+
+# imprime uma parte do arquivo que vai da expressão regular até
+# o final do mesmo
+sed -n '/regexp/,$p'
+
+# imprime uma parte do arquivo baseada nos números das linhas (linhas 8-12,
+# inclusive)
+sed -n '8,12p'               # método 1
+sed '8,12!d'                 # método 2
+
+# imprime a linha de número 52
+sed -n '52p'                 # método 1
+sed '52!d'                   # método 2
+sed '52q;d'                  # método 3, eficiente com arquivos grandes
+
+# imprime um pedaço de arquivo que está entre as duas
+# expressões regulares (inclusive)
+sed -n '/Iowa/,/Montana/p'             # é case sensitive
 
 
 DELEÇÃO SELETIVA DE CERTAS LINHAS:
 
- # imprime todo o arquivo EXCETO a parte entre 2 expressões regulares
- sed '/Iowa/,/Montana/d'
+# imprime todo o arquivo EXCETO a parte entre 2 expressões regulares
+sed '/Iowa/,/Montana/d'
 
- # deleta linhas duplicadas de um arquivo (emula o "uniq"). A primeira
- # linha de um conjunto de linhas duplicadas é mantida, o resto é deletada
- sed '$!N; /^\(.*\)\n\1$/!P; D'
+# deleta linhas duplicadas de um arquivo (emula o "uniq"). A primeira
+# linha de um conjunto de linhas duplicadas é mantida, o resto é deletada
+sed '$!N; /^\(.*\)\n\1$/!P; D'
 
- # deleta TODAS as linhas em branco de um arquivo (o mesmo que "grep '.' ")
- sed '/^$/d'
+# deleta TODAS as linhas em branco de um arquivo (o mesmo que "grep '.' ")
+sed '/^$/d'
 
- # deleta todas as linhas brancas CONSECUTIVAS de um arquivo exceto a primeira;
- # ainda deleta todas as linhas em branco do início e fim do arquivo (emula o
- # "cat -s")
- sed '/./,/^$/!d'          # método 1, permite 0 brancos no topo, 1 no
-                           # final do arquivo
- sed '/^$/N;/\n$/D'        # método 2, permite 1 branco no top, 0 no
-                           # final do arquivo   
+# deleta todas as linhas brancas CONSECUTIVAS de um arquivo exceto a primeira;
+# ainda deleta todas as linhas em branco do início e fim do arquivo (emula o
+# "cat -s")
+sed '/./,/^$/!d'          # método 1, permite 0 brancos no topo, 1 no
+                          # final do arquivo
+sed '/^$/N;/\n$/D'        # método 2, permite 1 branco no top, 0 no
+                          # final do arquivo   
 
- # deleta todas as linhas em branco do arquivo, exceto as 2 primeiras:
- sed '/^$/N;/\n$/N;//D'
+# deleta todas as linhas em branco do arquivo, exceto as 2 primeiras:
+sed '/^$/N;/\n$/N;//D'
 
- # deleta todas as linhas em branco iniciais, no início do arquivo
- sed '/./,$!d'
+# deleta todas as linhas em branco iniciais, no início do arquivo
+sed '/./,$!d'
 
- # deleta todas as linhas em branco finais, no final do arquivo
- sed -e :a -e '/^\n*$/N;/\n$/ba'
+# deleta todas as linhas em branco finais, no final do arquivo
+sed -e :a -e '/^\n*$/N;/\n$/ba'
 
- # deleta a última linha de cada parágrafo
- sed -n '/^$/{p;h;};/./{x;/./p;}'
+# deleta a última linha de cada parágrafo
+sed -n '/^$/{p;h;};/./{x;/./p;}'
 
 APLICAÇÕES ESPECIAIS:
 
- # remove overstrikes nroff (caracter, backspace) das man pages. O comando
- # 'echo' pode precisar da opção -e se você usar Unix System V ou uma
- # shell bash
- sed "s/.`echo \\\b`//g"    # as aspas duplas são necessárias em ambiente Unix
- sed 's/.^H//g'             # no bash/tcsh, pressione Ctrl-V e depois Ctrl-H
- sed 's/.\x08//g'           # expressão hexadecimal para o sed v1.5
+# remove overstrikes nroff (caracter, backspace) das man pages. O comando
+# 'echo' pode precisar da opção -e se você usar Unix System V ou uma
+# shell bash
+sed "s/.`echo \\\b`//g"    # as aspas duplas são necessárias em ambiente Unix
+sed 's/.^H//g'             # no bash/tcsh, pressione Ctrl-V e depois Ctrl-H
+sed 's/.\x08//g'           # expressão hexadecimal para o sed v1.5
 
- # mostra as mensagens de cabeçalho de um Usenet/e-mail
- sed '/^$/q'                # deleta tudo após a primeira linha em branco
+# mostra as mensagens de cabeçalho de um Usenet/e-mail
+sed '/^$/q'                # deleta tudo após a primeira linha em branco
 
- # mostra o corpo da mensagem de um Usenet/e-mail
- sed '1,/^$/d'              # deleta tudo "up to" da primeira linha em branco
+# mostra o corpo da mensagem de um Usenet/e-mail
+sed '1,/^$/d'              # deleta tudo "up to" da primeira linha em branco
 
- # mostra o cabeçalho Subject, mas remove a porção inicial "Subject :"
- sed '/^Subject: */!d; s///;q'
+# mostra o cabeçalho Subject, mas remove a porção inicial "Subject :"
+sed '/^Subject: */!d; s///;q'
 
- # pega o cabeçalho de endereço de resposta 
- sed '/^Reply-To:/q; /^From:/h; /./d;g;q'
+# pega o cabeçalho de endereço de resposta 
+sed '/^Reply-To:/q; /^From:/h; /./d;g;q'
 
- # verifica o endereço de maneira correta. Pega o endereço de e-mail
- # através da 1a linha do cabeçalho de endereço de retorno (veja
- # o script acima)
- sed 's/ *(.*)//; s/>.*//; s/.*[:<] *//'
+# verifica o endereço de maneira correta. Pega o endereço de e-mail
+# através da 1a linha do cabeçalho de endereço de retorno (veja
+# o script acima)
+sed 's/ *(.*)//; s/>.*//; s/.*[:<] *//'
 
- # adiciona um sinal de maior com um espaço a cada linha (citação de uma
- # mensagem)
- sed 's/^/> /'
+# adiciona um sinal de maior com um espaço a cada linha (citação de uma
+# mensagem)
+sed 's/^/> /'
 
- # deleta o sinal de maior e o espaço de cada linha (remove a
- # citação de uma mensagem)
- sed 's/^> //'
+# deleta o sinal de maior e o espaço de cada linha (remove a
+# citação de uma mensagem)
+sed 's/^> //'
 
- # remove a maioria das tags HTML (acomoda tags de múltiplas linhas)
- sed -e :a -e 's/<[^>]*>//g;/zipup.bat
- dir /b *.txt | sed "s/^\(.*\)\.TXT/pkzip -mo \1 \1.TXT/" >>zipup.bat
+# remove a maioria das tags HTML (acomoda tags de múltiplas linhas)
+sed -e :a -e 's/<[^>]*>//g;/zipup.bat
+dir /b *.txt | sed "s/^\(.*\)\.TXT/pkzip -mo \1 \1.TXT/" >>zipup.bat
 
 USO TÍPICO: O sed pega um ou mais comandos de edição e aplica todos eles,
 em sequência, a cada linha de entrada. Após todos os comandos terem sido
@@ -303,11 +361,11 @@ mesmo sabendo que a popular versão GNU do sed permite uma sintaxe
 mais sucinta. Quando o leitor vê um comando comprido como esse:
 
 
-   sed -e '/AAA/b' -e '/BBB/b' -e '/CCC/b' -e d
+  sed -e '/AAA/b' -e '/BBB/b' -e '/CCC/b' -e d
 
 é importante que ele saiba que o GNU sed permite uma redução, como:
 
-   sed '/AAA/b;/BBB/b;/CCC/b;d'
+  sed '/AAA/b;/BBB/b;/CCC/b;d'
 
 Lembre-se ainda que, apesar de muitas versões do sed aceitarem comandos
 como "/one/ s/RE1/RE2/", algumas não permitem o uso de "/one/! s/RE1/RE2/",
@@ -320,30 +378,29 @@ e discos rígidos lentos), a substituição será executada mais rapidamente
 se a expressão de "procura" é especificada antes da instrução
 "s/.../.../". Assim:
 
-   sed 's/foo/bar/g' arquivo         # comando de substituição padrão
-   sed '/foo/ s/foo/bar/g' arquivo   # executa de forma mais rápida
-   sed '/foo/ s//bar/g' arquivo      # sintaxe mais sucinta
+  sed 's/foo/bar/g' arquivo         # comando de substituição padrão
+  sed '/foo/ s/foo/bar/g' arquivo   # executa de forma mais rápida
+  sed '/foo/ s//bar/g' arquivo      # sintaxe mais sucinta
 
 Na seleção ou remoção de linhas nas quais você somente precisa
 ver uma primeira parte de um arquivo, o comando "quit" (q) no script
 irá reduzir drasticamente o tempo de processamento para arquivos
 grandes. Assim:
 
-   sed -n '45,50p' arquivo           # imprime as linhas nos. 45-50
-   sed -n '51q;45,50p' arquivo       # mesma coisa, mas faz muito mais
-                                     # rapidamente
-        
+  sed -n '45,50p' arquivo           # imprime as linhas nos. 45-50
+  sed -n '51q;45,50p' arquivo       # mesma coisa, mas faz muito mais
+                                    # rapidamente
+       
 Se você deseja contribuir com mais scripts ou se achou algum erro neste
 documento, por favor mande um email para o compilador. Indique a
 versão do sed que voce usou, o sistema operacional para o qual ele
 foi compilado e a natureza do problema. Vários scripts mostrados
 neste arquivo foram escritos por:
 
- Al Aab <af137@freenet.toronto.on.ca>   # moderador da lista "seders"
- Yiorgos Adamopoulos <adamo@softlab.ece.ntua.gr>
- Dale Dougherty <dale@songline.com>     # autor do "sed & awk"
- Carlos Duarte <cdua@algos.inesc.pt>    # autor do "do it with sed"
- Eric Pement <epement@jpusa.chi.il.us>  # autor deste documento
- S.G.Ravenhall <S.G.Ravenhall@open.ac.uk> # um grande script de-html
- Greg Ubben <gsu@romulus.ncsc.mil>      # muitas contribuições & muita ajuda
--------------------------------------------------------------------------
+Al Aab <af137@freenet.toronto.on.ca>   # moderador da lista "seders"
+Yiorgos Adamopoulos <adamo@softlab.ece.ntua.gr>
+Dale Dougherty <dale@songline.com>     # autor do "sed & awk"
+Carlos Duarte <cdua@algos.inesc.pt>    # autor do "do it with sed"
+Eric Pement <epement@jpusa.chi.il.us>  # autor deste documento
+S.G.Ravenhall <S.G.Ravenhall@open.ac.uk> # um grande script de-html
+Greg Ubben <gsu@romulus.ncsc.mil>      # muitas contribuições & muita ajuda
