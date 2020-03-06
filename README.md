@@ -8,6 +8,46 @@ Traduzido por Ricardo Sartori <sartori@lrv.ufsc.br>
 
 A versão mais atualizada deste arquivo pode ser encontrada em <http://www.wollery.demon.co.uk>
 
+## Alfabeto do sed
+
+Opção | Nome | Descrição
+:-----: | ---- | --------
+**a**  |  append     |   anexa um texto após o [BUFFER]
+**b**  |  branch     |   pula até uma marcação
+**c**  |  change     |   troca o [BUFFER] por um texto
+**d**  |  delete     |   apaga o [BUFFER]
+**D**  |  delete     |   apaga a primeira linha do [BUFFER]
+**e**  |  execute    |   executa um comando do sistema #GNU-sed
+**F**  |  filename   |   imprime o nome do aquivo atual #GNU-sed
+**g**  |  get        |   copia texto do [RESERVA] pro [BUFFER] (sobrescreve)
+**G**  |  get        |   copia texto do [RESERVA] pro [BUFFER] (anexa)
+**h**  |  hold       |   copia texto do [BUFFER] pro [RESERVA] (sobrescreve)
+**H**  |  hold       |   copia texto do [BUFFER] pro [RESERVA] (anexa)
+**i**  |  insert     |   insere um texto antes do [BUFFER]
+**l**  |  list       |   imprime o [BUFFER] mostrando caracteres invisíveis
+**n**  |  next       |   carrega a próxima linha no [BUFFER]
+**N**  |  next       |   anexa a próxima linha no [BUFFER]
+**p**  |  print      |   imprime o conteúdo do [BUFFER]
+**P**  |  print      |   imprime a primeira linha do [BUFFER]
+**q**  |  quit       |   imprime o [BUFFER] e finaliza o Sed
+**Q**  |  quit       |   descarta o [BUFFER] e finaliza o Sed #GNU-sed
+**r**  |  read       |   mostra conteúdo do arquivo após o [BUFFER]
+**R**  |  read       |   mostra uma linha do arquivo após o [BUFFER] #GNU-sed
+**s**  |  substitute |   substitui um trecho de texto por outro
+**t**  |  tee        |   pula na marcação, se um s/// funcionou
+**T**  |  tee        |   pula na marcação, se nenhum s/// funcionou #GNU-sed
+**v**  |  version    |   aborta se a versão do sed for incompatível #GNU-sed
+**w**  |  write      |   grava o [BUFFER] num arquivo
+**W**  |  write      |   grava a 1ª linha do [BUFFER] num arquivo #GNU-sed
+**x**  |  eXchange   |   troca os conteúdos do [BUFFER] e [RESERVA]
+**y**  |  ?          |   troca caracteres
+**z**  |  zap        |   limpa o conteúdo do [BUFFER] #GNU-sed
+
+Nota:
+   <span style="color:green">*[BUFFER]*</span> - Buffer padrão do sed (pattern space)
+
+   [RESERVA] - Buffer reserva do sed (hold space)
+
 ## PREENCHIMENTO DE ARQUIVOS:
 
 Duplicar o tamanho de um arquivo
@@ -502,7 +542,7 @@ grandes. Assim:
 ```bash
 sed -n '45,50p' arquivo           # imprime as linhas nos. 45-50
 sed -n '51q;45,50p' arquivo       # mesma coisa, mas faz muito mais
-                                    # rapidamente
+                                  # rapidamente
 ```
 
 ---
