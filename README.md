@@ -60,11 +60,11 @@ sed -n '$='
 EM AMBIENTE UNIX: converte o caractere de linha nova do DOS (CR/LF) para o 
 formato unix
 
-``
+```bash
 sed 's/.$//'               # assume que todas as linhas terminam com CR/LF
 sed 's/^M$//'              # no bash/tcsh, pressione Ctrl-V depois Ctrl-M
 sed 's/\x0D$//'            # somente no sed v1.5
-``
+```
 
 EM AMBIENTE DOS: converte o caractere de linha nova do Unix (LF) para 
 o formato DOS
