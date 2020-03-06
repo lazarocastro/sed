@@ -12,42 +12,42 @@ A versão mais atualizada deste arquivo pode ser encontrada em <http://www.wolle
 
 Opção | Nome | Descrição
 :-----: | ---- | --------
-**a**  |  append     |   Anexa um texto após o [BUFFER]
+**a**  |  append     |   Anexa um texto após o <span style="color:green;">**[BUFFER]**</span> 
 **b**  |  branch     |   Pula até uma marcação
-**c**  |  change     |   Troca o [BUFFER] por um texto
-**d**  |  delete     |   Apaga o [BUFFER]
-**D**  |  delete     |   Apaga a primeira linha do [BUFFER]
+**c**  |  change     |   Troca o <span style="color:green;">**[BUFFER]**</span> por um texto
+**d**  |  delete     |   Apaga o <span style="color:green;">**[BUFFER]**</span> 
+**D**  |  delete     |   Apaga a primeira linha do <span style="color:green;">**[BUFFER]**</span> 
 **e**  |  execute    |   Executa um comando do sistema #GNU-sed
 **F**  |  filename   |   Imprime o nome do aquivo atual #GNU-sed
-**g**  |  get        |   Copia texto do [RESERVA] pro [BUFFER] (sobrescreve)
-**G**  |  get        |   Copia texto do [RESERVA] pro [BUFFER] (anexa)
-**h**  |  hold       |   Copia texto do [BUFFER] pro [RESERVA] (sobrescreve)
-**H**  |  hold       |   Copia texto do [BUFFER] pro [RESERVA] (anexa)
-**i**  |  insert     |   Insere um texto antes do [BUFFER]
-**l**  |  list       |   Imprime o [BUFFER] mostrando caracteres invisíveis
-**n**  |  next       |   Carrega a próxima linha no [BUFFER]
-**N**  |  next       |   Anexa a próxima linha no [BUFFER]
-**p**  |  print      |   Imprime o conteúdo do [BUFFER]
-**P**  |  print      |   Imprime a primeira linha do [BUFFER]
-**q**  |  quit       |   Imprime o [BUFFER] e finaliza o Sed
-**Q**  |  quit       |   Descarta o [BUFFER] e finaliza o Sed #GNU-sed
-**r**  |  read       |   Mostra conteúdo do arquivo após o [BUFFER]
-**R**  |  read       |   Mostra uma linha do arquivo após o [BUFFER] #GNU-sed
+**g**  |  get        |   Copia texto do <span style="color:red;">**[RESERVA]**</span> pro <span style="color:green;">**[BUFFER]**</span> (sobrescreve)
+**G**  |  get        |   Copia texto do <span style="color:red;">**[RESERVA]**</span> pro <span style="color:green;">**[BUFFER]**</span> (anexa)
+**h**  |  hold       |   Copia texto do <span style="color:green;">**[BUFFER]**</span> pro <span style="color:red;">**[RESERVA]**</span> (sobrescreve)
+**H**  |  hold       |   Copia texto do <span style="color:green;">**[BUFFER]**</span> pro <span style="color:red;">**[RESERVA]**</span> (anexa)
+**i**  |  insert     |   Insere um texto antes do <span style="color:green;">**[BUFFER]**</span>
+**l**  |  list       |   Imprime o <span style="color:green;">**[BUFFER]**</span> mostrando caracteres invisíveis
+**n**  |  next       |   Carrega a próxima linha no <span style="color:green;">**[BUFFER]**</span> 
+**N**  |  next       |   Anexa a próxima linha no <span style="color:green;">**[BUFFER]**</span> 
+**p**  |  print      |   Imprime o conteúdo do <span style="color:green;">**[BUFFER]**</span> 
+**P**  |  print      |   Imprime a primeira linha do <span style="color:green;">**[BUFFER]**</span> 
+**q**  |  quit       |   Imprime o <span style="color:green;">**[BUFFER]**</span> e finaliza o Sed
+**Q**  |  quit       |   Descarta o <span style="color:green;">**[BUFFER]**</span> e finaliza o Sed #GNU-sed
+**r**  |  read       |   Mostra conteúdo do arquivo após o <span style="color:green;">**[BUFFER]**</span> 
+**R**  |  read       |   Mostra uma linha do arquivo após o <span style="color:green;">**[BUFFER]**</span> #GNU-sed
 **s**  |  substitute |   Substitui um trecho de texto por outro
 **t**  |  tee        |   Pula na marcação, se um s/// funcionou
 **T**  |  tee        |   Pula na marcação, se nenhum s/// funcionou #GNU-sed
 **v**  |  version    |   Aborta se a versão do sed for incompatível #GNU-sed
-**w**  |  write      |   Grava o [BUFFER] num arquivo
-**W**  |  write      |   Grava a 1ª linha do [BUFFER] num arquivo #GNU-sed
-**x**  |  eXchange   |   Troca os conteúdos do [BUFFER] e [RESERVA]
+**w**  |  write      |   Grava o <span style="color:green;">**[BUFFER]**</span> num arquivo
+**W**  |  write      |   Grava a 1ª linha do <span style="color:green;">**[BUFFER]**</span> num arquivo #GNU-sed
+**x**  |  eXchange   |   Troca os conteúdos do <span style="color:green;">**[BUFFER]**</span> e <span style="color:red;">**[RESERVA]**</span>
 **y**  |  ?          |   Troca caracteres
-**z**  |  zap        |   Limpa o conteúdo do [BUFFER] #GNU-sed
+**z**  |  zap        |   Limpa o conteúdo do <span style="color:green;">**[BUFFER]**</span> #GNU-sed
 
 Nota:
 
-   <span style="color:green;">[BUFFER]</span> - Buffer padrão do sed (pattern space)
+   <span style="color:green;">**[BUFFER]**</span> - Buffer padrão do sed (pattern space)
 
-   <span style="color:red;">[RESERVA]</span> - Buffer reserva do sed (hold space)
+   <span style="color:red;">**[RESERVA]**</span> - Buffer reserva do sed (hold space)
 
 ## PREENCHIMENTO DE ARQUIVOS:
 
